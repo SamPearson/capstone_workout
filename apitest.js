@@ -4,35 +4,38 @@ const fetch = require("node-fetch")
 //returns an object with "count", "next", "previous" and "results"
 //results is limited to 20 by default, can be set as high as 100
 //next and previous will be urls for the next/previous set of results
-fetch ('https://wger.de/api/v2/exerciseinfo/?language=2')
-  .then((response) => {
-    return response.json()
-  })
-  .then((data) =>{
-    // Work with json data here
-    console.log(data)
-  })
-  .catch((err)=>{
-    //do something for an error here
-    console.log("Oopsiedoodle! An error!")
-  })
+
+// fetch ('https://wger.de/api/v2/exerciseinfo/?language=2')
+//   .then((response) => {
+//     return response.json()
+//   })
+//   .then((data) =>{
+//     // Work with json data here
+//     console.log(data)
+//   })
+//   .catch((err)=>{
+//     //do something for an error here
+//     console.log("Oopsiedoodle! An error!")
+//   })
 
 
 //Fetching a single exercise
-fetch ('https://wger.de/api/v2/exerciseinfo/74/?language=2')
-  .then((response) => {
-    return response.json()
-  })
-  .then((data) =>{
-    // Work with json data here
-    console.log(data)
-  })
-  .catch((err)=>{
-    //do something for an error here
-    console.log("Oopsiedoodle! An error!")
-  })
 
-// Example data: Single exercise -
+// fetch ('https://wger.de/api/v2/exerciseinfo/74/?language=2')
+//   .then((response) => {
+//     return response.json()
+//   })
+//   .then((data) =>{
+//     // Work with json data here
+//     console.log(data)
+//   })
+//   .catch((err)=>{
+//     //do something for an error here
+//     console.log("Oopsiedoodle! An error!")
+//   })
+
+//Example data: Single exercise -
+
 // {
 //   id: 74,
 //   name: 'Biceps Curls With Barbell',
@@ -78,4 +81,68 @@ fetch ('https://wger.de/api/v2/exerciseinfo/74/?language=2')
 //     }
 //   ]
 // }
+
+//Fetching a list of muscles
+
+// fetch ('https://wger.de/api/v2/muscle/?language=2')
+//   .then((response) => {
+//     return response.json()
+//   })
+//   .then((data) =>{
+//     // Work with json data here
+//     console.log(data)
+//   })
+//   .catch((err)=>{
+//     //do something for an error here
+//     console.log("Oopsiedoodle! An error!")
+//   })
+
+
+//Fetching a list of equipment
+
+// fetch ('https://wger.de/api/v2/equipment/?language=2')
+// .then((response) => {
+//   return response.json()
+// })
+// .then((data) =>{
+//   // Work with json data here
+//   console.log(data)
+// })
+// .catch((err)=>{
+//   //do something for an error here
+//   console.log("Oopsiedoodle! An error!")
+// })
+
+
+
+//Fetching a list of exercise categories
+
+// fetch ('https://wger.de/api/v2/exercisecategory/?language=2')
+// .then((response) => {
+//   return response.json()
+// })
+// .then((data) =>{
+//   // Work with json data here
+//   console.log(data)
+// })
+// .catch((err)=>{
+//   //do something for an error here
+//   console.log("Oopsiedoodle! An error!")
+// })
+
+
+// Fetching a list of chest exercises that don't require equipment
+
+fetch ('https://wger.de/api/v2/exercise/?language=2&category=11&equipment=7')
+.then((response) => {
+  return response.json()
+})
+.then((data) =>{
+  // Work with json data here
+  console.log(data)
+})
+.catch((err)=>{
+  //do something for an error here
+  console.log("Oopsiedoodle! An error!")
+})
 
