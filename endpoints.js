@@ -21,17 +21,95 @@ app.use(bodyParser.json())
 // populate it with json strings representing exercises
 let exercise_list = []
 
+function build_endpoint_url(endpoint, search_params, language = 2, limit = 250){
+
+  const default_params = `?language=${language}&limit=${limit}&`
+
+  //Using a map to join search parameters and their values
+  // each key and value in search_params is joined with '='
+  // then, each pair is joined with '&'
+  const url_params = default_params + Object.entries(search_params).map(e => e.join('=')).join('&')
+
+  let full_url = 'https://wger.de/api/v2/' + endpoint + url_params
+  
+  console.log(`Constructed the API url: ${full_url}`)
+
+  return full_url
+
+}
+
+
+async function wger_api_fetch(url){
+
+  console.log("3 - Now you're in the API fetch function; I expect this to happen third")
+
+  var exercise_list = []
+  fetch (url)
+    .then((response) => {
+      return response.json()
+    })
+    .then((data) =>{
+
+      //Log data about the results to the console
+      if( data.count ){
+        console.log(`Number of results: ${data.count}`)
+      }
+
+      exercise_list = data.results
+      
+    })
+    .catch((err)=>{
+      console.log('---')
+      console.log("Hey look an error. How exceptional.")
+      console.log(err)
+      console.log('---')
+      return {}
+
+    })
+    .finally( ()=>{
+      console.log("4 - Now we have the desired JSON stored in a variable. I expect this to happen fourth")
+      console.log(exercise_list) //Uncomment this to show that the desired JSON is present
+      return exercise_list // this returns 'undefined' to where the function was called from
+    })
+
+}
+
+
+app.get('/debug/paramtest', function(req, res){
+
+  console.log("1 - You've hit the endpoint. I expect this to happen first.")
+
+  const endpoint = 'exerciseinfo/'
+
+  const param_list = {
+    muscles : 1,
+    equipment : 3
+  }
+  
+  console.log("Building request URL")
+  const request_url = build_endpoint_url(endpoint, param_list)
+  console.log("2 - The API URL has been constructed. I expect this to happen second.")
+  const results = wger_api_fetch(request_url)
+  .then( response => {
+    console.log("5 - Now we should have the desired JSON, but we're back in the express route function so we can handle it. I expect this to happen fifth")
+    //logging reslts or response at this point returns a promise or 'undefined', respectively 
+    console.log(`${results} - ${response} - lol stupid`)
+  
+    console.log("Sending results to the client")
+    res.json(results) 
+    })
+
+
+
+})
 
 //Fetch all Exercises
 app.get('/exercises', function(req,res){
 
-  fetch ('https://wger.de/api/v2/exerciseinfo/?language=2')
+  fetch ('https://wger.de/api/v2/exerciseinfo/?language=2&limit=250')
     .then((response) => {
       return response.json()
     })
-    //TODO: max out results per page and use a do/while loop to 
-    // continue fetching while data.next exists, then concat all 
-    // results into one list
     .then((data) =>{
       //Log data about the results to the console
       if( data.count ){
