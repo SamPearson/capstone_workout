@@ -27,24 +27,25 @@ function build_endpoint_url(endpoint, search_params, language = 2, limit = 250){
 
   //Using a map to join search parameters and their values
   // each key and value in search_params is joined with '='
-  // then, each pair is joined with '&'
+  // then, each pair is joined with '&'  
   const url_params = default_params + Object.entries(search_params).map(e => e.join('=')).join('&')
 
-  let full_url = 'https://wger.de/api/v2/' + endpoint + url_params
-  
+  let full_url = 'https://wger.de/api/v2/' + endpoint + url_params  
   console.log(`Constructed the API url: ${full_url}`)
-
   return full_url
 
 }
 
 
 async function wger_api_fetch(url){
+  //This function was built to fetch data from the API and halt control flow of
+  // the program until that data is retrieved. Calls to this function should 
+  // use 'await' and thus be inside of another async function.
+  console.log(`Fetching data from the API using the url ${url}`)
 
-  console.log("3 - Now you're in the API fetch function; I expect this to happen third")
+  var exercise_list = {}
 
-  var exercise_list = []
-  fetch (url)
+  await fetch (url)
     .then((response) => {
       return response.json()
     })
@@ -66,40 +67,32 @@ async function wger_api_fetch(url){
       return {}
 
     })
-    .finally( ()=>{
-      console.log("4 - Now we have the desired JSON stored in a variable. I expect this to happen fourth")
-      console.log(exercise_list) //Uncomment this to show that the desired JSON is present
-      return exercise_list // this returns 'undefined' to where the function was called from
-    })
+
+    //You may want to put similar logspam right after the call to this function
+    // as a means of double-checking whether you have the data before attempting
+    // to modify or use it.
+    console.log("Finished fetching API data.")
+    return exercise_list
 
 }
 
 
-app.get('/debug/paramtest', function(req, res){
-
-  console.log("1 - You've hit the endpoint. I expect this to happen first.")
+app.get('/debug/paramtest', async function(req, res){
+  //In this function, the desired endpoint and list of parameters
+  // are hard-coded. This is simply to show that the api fetch function
+  // can be passed an endpoint and some params. In more realistic use cases,
+  // the endpoint and paramters would be pulled out of post variables from 
+  // the request, which would in turn be constructed by an html form.
 
   const endpoint = 'exerciseinfo/'
-
   const param_list = {
     muscles : 1,
     equipment : 3
   }
-  
-  console.log("Building request URL")
+
   const request_url = build_endpoint_url(endpoint, param_list)
-  console.log("2 - The API URL has been constructed. I expect this to happen second.")
-  const results = wger_api_fetch(request_url)
-  .then( response => {
-    console.log("5 - Now we should have the desired JSON, but we're back in the express route function so we can handle it. I expect this to happen fifth")
-    //logging reslts or response at this point returns a promise or 'undefined', respectively 
-    console.log(`${results} - ${response} - lol stupid`)
-  
-    console.log("Sending results to the client")
-    res.json(results) 
-    })
-
-
+  const results = await wger_api_fetch(request_url)
+  res.send(results)
 
 })
 
