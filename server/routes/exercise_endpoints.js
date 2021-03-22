@@ -53,7 +53,7 @@ router.get('/', async function(req,res){
     } else {
 
       endpoint = "exercise"
-      params.exercisecategory = qparam
+      params.exercisecategory = Number(qparam)
       console.log(params)
 
     }
@@ -113,7 +113,7 @@ router.get('/', async function(req,res){
 
   // w/ images
   if( req.query.has_image ){
-    
+
     console.log(`Searching for exercises with images`)
 
   }
