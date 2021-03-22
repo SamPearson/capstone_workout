@@ -36,7 +36,6 @@ router.get('/', async function(req,res){
   
   // muscle group
   // URL - http://localhost:3000/exercises?muscle_group=2
-  // Doesn't work.
   if( req.query.muscle_group ){
     let qparam = req.query.muscle_group
     console.log(`Searching for exercises in a muscle group = '${qparam}'`)
@@ -48,12 +47,12 @@ router.get('/', async function(req,res){
       let target_index = _.findIndex(muscle_groups, function(o) { return o.name.toLowerCase().includes(qparam.toLowerCase()) } )
 
       console.log( `Found a match for ${qparam}, ${target_index}`)
-      params.exercisecategory = target_index
+      params.category = Number(target_index)
 
     } else {
 
       endpoint = "exercise"
-      params.exercisecategory = Number(qparam)
+      params.category = Number(qparam)
       console.log(params)
 
     }
