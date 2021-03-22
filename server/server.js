@@ -25,10 +25,6 @@ app.use("/debug", debug_endpoints )
 const exercise_endpoints = require("./routes/exercise_endpoints")
 app.use("/exercises", exercise_endpoints )
 
-//Endpoints that will return lists of things that exercises can be filtered by
-const filter_endpoints = require("./routes/filter_info_endpoints")
-app.use("/filters", filter_endpoints )
-
 
 app.listen(PORT)
 console.log(`Listening on port ${PORT}`)
