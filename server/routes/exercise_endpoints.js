@@ -47,7 +47,8 @@ router.get('/', async function(req,res){
       let target_index = _.findIndex(muscle_groups, function(o) { return o.name.toLowerCase().includes(qparam.toLowerCase()) } )
 
       console.log( `Found a match for ${qparam}, ${target_index}`)
-      params.category = Number(target_index)
+      endpoint = "exercise"
+      params.category = muscle_groups[target_index].id
 
     } else {
 
