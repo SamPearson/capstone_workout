@@ -1,0 +1,59 @@
+<script src="https://apis.google.com/js/api.js"></script>
+<script>
+  /**
+   * Sample JavaScript code for calendar.events.insert
+   * See instructions for running APIs Explorer code samples locally:
+   * https://developers.google.com/explorer-help/guides/code_samples#javascript
+   */
+var workoutEvent = {
+  'summary': 'Google I/O 2015',
+  'location': '800 Howard St., San Francisco, CA 94103',
+  'description': 'A chance to hear more about Google\'s developer products.',
+  'start': {
+    'dateTime': '2021-03-29T09:00:00-07:00',
+    'timeZone': 'America/Los_Angeles'
+  },
+  'end': {
+    'dateTime': '2021-03-29T17:00:00-07:00',
+    'timeZone': 'America/Los_Angeles'
+  },
+  'attendees': [
+    {'email': 'lpage@example.com'},
+    {'email': 'sbrin@example.com'}
+  ]
+}
+        
+
+  
+  function authenticate() {
+    return gapi.auth2.getAuthInstance()
+        .signIn({scope: "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events"})
+        .then(function() { console.log("Sign-in successful"); },
+              function(err) { console.error("Error signing in", err); });
+  }
+  function loadClient() {
+    gapi.client.setApiKey("AIzaSyBug3qiYA9iFysJOlZ5jAJDWZKVu6NygBI");
+    return gapi.client.load("https://content.googleapis.com/discovery/v1/apis/calendar/v3/rest")
+        .then(function() { console.log("GAPI client loaded for API"); },
+              function(err) { console.error("Error loading GAPI client for API", err); });
+  }
+
+  gapi.load("client:auth2", function() {
+    gapi.auth2.init({client_id: "586544686221-bij2jnfc3q3sjdfuvb7qn0e4q8vaeics.apps.googleusercontent.com"});
+  });
+
+    // Make sure the client is loaded and sign-in is complete before calling this method.
+  function execute(entry) {
+    return gapi.client.calendar.events.insert({
+      'calendarId': 'primary',
+      "resource": entry
+    }).then (function(response) {
+      // Handle the results here (response.result has the parsed body).
+      console.log("Response", response);
+    }, function(err) { 
+      console.error("Execute error", err); 
+    });
+  }
+</script>
+<button onclick="authenticate().then(loadClient)">authorize and load</button>
+<button onclick="execute(workoutEvent)">execute</button>
